@@ -25,15 +25,18 @@ class UI():
         return main_widget
 
     def icmp(self):
-        e_type = urwid.Edit(u'Type: ')
-        e_code = urwid.Edit(u'Code: ')
-        e_data = urwid.Edit(u'Data: ')
-        send = urwid.Button(u'Send')
-        urwid.connect_signal(send, 'click', self.send_program)
+        icmp_choices = u'Ping Customize'.split()
+        body = [urwid.Text(u'ICMP'), urwid.Divider()]
+        for c in icmp_choices:
+            button = urwid.Button(c)
+            urwid.connect_signal(button, 'click', self.item_chosen, c)
+            body.append(urwid.AttrMap(button, None, focus_map='reversed'))
+        choices_list = urwid.ListBox(urwid.SimpleFocusListWalker(body))
+
         back = urwid.Button(u'Back')
         urwid.connect_signal(back, 'click', self.item_chosen, 'main')
 
-        return urwid.Filler(urwid.Pile([urwid.Columns([e_type, e_code]), e_data, urwid.Columns([send, back])]))
+        return urwid.Padding(choices_list)
 
     def send_program(self, button):
         pass
